@@ -16,34 +16,36 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.Aula.entities.Contato;
-import com.example.Aula.repository.ContatoRepository;
+import com.example.Aula.entities.Compromisso;
+import com.example.Aula.repository.CompromissoRepository;
 
 @RestController
-@RequestMapping("/contatos")
-public class ContatoController {
+@RequestMapping("/compromisso")
+public class CompromissoController {
 	@Autowired
-	ContatoRepository repo;
+	CompromissoRepository repo;
 	
 	@GetMapping()
-	public ResponseEntity<List<Contato>> getContatos() {
+	public ResponseEntity<List<Compromisso>> getCompromisso() {
 		return ResponseEntity.status(HttpStatus.OK).body(repo.findAll());
 	}
 		
 	@PostMapping()
-	public ResponseEntity<Contato> inserirContato(@RequestBody Contato contato) {
-		Contato ct = repo.save(contato);
+	public ResponseEntity<Compromisso> inserirContato(@RequestBody Compromisso compromisso) {
+		Compromisso ct = repo.save(compromisso);
 		return ResponseEntity.status(HttpStatus.CREATED).body(ct);
 	}
 	
 	@PutMapping("/{idcontato}")
-	public ResponseEntity<Contato> alterarContato(@PathVariable("idcontato") Long idcontato, 
-			@RequestBody Contato contato) {
-		Optional<Contato> opContato = repo.findById(idcontato);
+	public ResponseEntity<Compromisso> alterarCompromisso(@PathVariable("idcompromisso") Long idcompromisso, 
+			@RequestBody Compromisso compromisso) {
+		Optional<Compromisso> opCompromisso = repo.findById(idcompromisso);
 		try {
-			Contato ct = opContato.get();		
-			ct.setNome(contato.getNome());
-			ct.setEmail(contato.getEmail());
+			Compromisso ct = opCompromisso.get();		
+			ct.setLocal(compromisso.getLocal());
+			ct.setData(compromisso.getData());
+			ct.setHora(compromisso.getHora());
+			ct.setStatus(compromisso.getStatus());
 			repo.save(ct);
 			return ResponseEntity.status(HttpStatus.OK).body(ct);
 		}
@@ -53,10 +55,10 @@ public class ContatoController {
 	}
 		
 	@GetMapping("/{id}")
-	public ResponseEntity<Contato> getUmContato(@PathVariable("id") long id) {
-		Optional<Contato> opContato = repo.findById(id);
+	public ResponseEntity<Compromisso> getUmCompromisso(@PathVariable("id") long id) {
+		Optional<Compromisso> opCompromisso = repo.findById(id);
 		try {
-			Contato ct = opContato.get();		
+			Compromisso ct = opCompromisso.get();		
 			return ResponseEntity.status(HttpStatus.OK).body(ct);
 		}
 		catch(Exception e) {
@@ -65,10 +67,10 @@ public class ContatoController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Contato> excluirUmContato(@PathVariable("id") long id) {
-		Optional<Contato> opContato = repo.findById(id);
+	public ResponseEntity<Compromisso> excluirCompromisso(@PathVariable("id") long id) {
+		Optional<Compromisso> opCompromisso = repo.findById(id);
 		try {
-			Contato ct = opContato.get();	
+			Compromisso ct = opCompromisso.get();	
 			repo.delete(ct);
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		}
